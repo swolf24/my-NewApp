@@ -12,7 +12,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      setError("❌ Bitte gib eine E-Mail und ein Passwort ein.");
+      setError("❌ Pleas enter a Passwort or Mailadres");
       return;
     }
     setLoading(true);
@@ -21,8 +21,8 @@ const LoginScreen = ({ navigation }) => {
       await AsyncStorage.setItem("user", JSON.stringify(userCredential.user));
       navigation.replace("Home");
     } catch (err) {
-      setError(`❌ Fehler: ${err.message}`);
-      console.error("Login-Fehler:", err.code, err.message);
+      setError(`❌ fail: ${err.message}`);
+      console.error("Login-fail:", err.code, err.message);
     } finally {
       setLoading(false);
     }
@@ -40,7 +40,7 @@ const LoginScreen = ({ navigation }) => {
       />
       <TextInput 
         style={styles.input} 
-        placeholder="Passwort" 
+        placeholder="Password" 
         secureTextEntry 
         autoCapitalize="none" 
         onChangeText={setPassword} 
@@ -57,7 +57,7 @@ const LoginScreen = ({ navigation }) => {
 
       <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
         <Text style={{ marginTop: 10, color: "#007AFF" }}>
-          Noch keinen Account? Registrieren
+        Don't have an account yet? SigUp
         </Text>
       </TouchableOpacity>
     </View>

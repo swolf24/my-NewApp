@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-// Screens
+// Import screens
 import LocationsScreen from './screens/LocationsScreen';
 import AddLocationScreen from './screens/AddLocationScreen';
 import MapScreen from './screens/MapScreen';
@@ -14,12 +14,12 @@ import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import UserScreen from './screens/UserScreen';
 
-
+// Create navigators
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const LocationsStackNav = createNativeStackNavigator();
 
-
+// Groups locations-related screens
 function LocationsStack() {
   return (
     <LocationsStackNav.Navigator>
@@ -37,24 +37,27 @@ function LocationsStack() {
   );
 }
 
+// Bottom tab navigator for main sections
 function MainTabs() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
-          if (route.name === 'LocationsTab') {
-            return <Ionicons name="list-outline" size={size} color={color} />;
-          } else if (route.name === 'AddLocationTab') {
-            return <Ionicons name="add-circle-outline" size={size} color={color} />;
-          } else if (route.name === 'MapTab') {
-            return <Ionicons name="map-outline" size={size} color={color} />;
-          } else if (route.name === 'CapitalsTab') {
-            return <Ionicons name="flag-outline" size={size} color={color} />;
+          switch (route.name) {
+            case 'LocationsTab':
+              return <Ionicons name="list-outline" size={size} color={color} />;
+            case 'AddLocationTab':
+              return <Ionicons name="add-circle-outline" size={size} color={color} />;
+            case 'MapTab':
+              return <Ionicons name="map-outline" size={size} color={color} />;
+            case 'CapitalsTab':
+              return <Ionicons name="flag-outline" size={size} color={color} />;
+            default:
+              return null;
           }
         },
       })}
     >
-      {}
       <Tab.Screen
         name="LocationsTab"
         component={LocationsStack}
@@ -79,60 +82,33 @@ function MainTabs() {
   );
 }
 
-
+// Top-level navigator with custom header (left: profile, right: exit)
 function AppNavigator() {
   return (
     <AppStack.Navigator
       screenOptions={({ navigation }) => ({
         headerTitleAlign: 'center',
-       
         headerLeft: () => (
           <TouchableOpacity onPress={() => navigation.navigate('UserProfile')}>
-            <Ionicons
-              name="person-circle-outline"
-              size={28}
-              color="#000"
-              style={{ marginLeft: 15 }}
-            />
+            <Ionicons name="person-circle-outline" size={28} color="#000" style={{ marginLeft: 15 }} />
           </TouchableOpacity>
         ),
-        
         headerRight: () => (
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Ionicons
-              name="exit-outline"
-              size={28}
-              color="#000"
-              style={{ marginRight: 15 }}
-            />
+            <Ionicons name="exit-outline" size={28} color="#000" style={{ marginRight: 15 }} />
           </TouchableOpacity>
         ),
       })}
     >
-      <AppStack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{ headerShown: false }}
-      />
-      <AppStack.Screen
-        name="SignUp"
-        component={SignUpScreen}
-        options={{ headerShown: false }}
-      />
-      <AppStack.Screen
-        name="Home"
-        component={MainTabs}
-        options={{ title: 'Home' }}
-      />
-      <AppStack.Screen
-        name="UserProfile"
-        component={UserScreen}
-        options={{ title: 'Profile' }}
-      />
+      <AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      <AppStack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
+      <AppStack.Screen name="Home" component={MainTabs} options={{ title: 'Home' }} />
+      <AppStack.Screen name="UserProfile" component={UserScreen} options={{ title: 'Profile' }} />
     </AppStack.Navigator>
   );
 }
 
+// Wrap the navigator with NavigationContainer
 export default function Navigation() {
   return (
     <NavigationContainer>

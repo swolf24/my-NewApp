@@ -11,7 +11,6 @@ const AddLocationScreen = () => {
   const [lat, setLat] = useState(null);
   const [lng, setLng] = useState(null);
   const [loadingGeo, setLoadingGeo] = useState(false);
-
   const navigation = useNavigation();
 
   // Clear form fields when the screen is focused.
@@ -25,6 +24,7 @@ const AddLocationScreen = () => {
     }, [])
   );
 
+  // Get coordinates using Nominatim API
   const getCoordinates = async (cityName) => {
     try {
       setLoadingGeo(true);
@@ -39,12 +39,13 @@ const AddLocationScreen = () => {
         return { lat: null, lng: null };
       }
     } catch (error) {
-      console.error("Geocoding error: ", error);
+      console.error("Geocoding error:", error);
       setLoadingGeo(false);
       return { lat: null, lng: null };
     }
   };
 
+  // Update coordinates when the city input changes
   const handleCityChange = async (text) => {
     setCity(text);
     if (text.length > 2) {
@@ -56,9 +57,12 @@ const AddLocationScreen = () => {
       setLng(null);
     }
   };
-
+  
+  // Add a new location to Firestore and navigate to the Locations overview
   const handleAddLocation = async () => {
-    Keyboard.dismiss(); 
+    Keyboard.dismiss();
+    Alert.alert("Successfully location added");
+    
     if (!city || !rating || lat === null || lng === null) {
       Alert.alert("Please fill in all fields and ensure a valid city is provided.");
       return;
@@ -70,33 +74,28 @@ const AddLocationScreen = () => {
         return;
       }
       await addDoc(collection(db, "locations"), {
-        city: city,
-        description: description,
+        city,
+        description,
         rating: Number(rating),
-        lat: lat,
-        lng: lng,
+        lat,
+        lng,
         uid: user.uid,
       });
-
-      // Clear all form fields immediately
+      
+      // Reset input fields
       setCity('');
       setDescription('');
       setRating('');
       setLat(null);
       setLng(null);
-
-      // Show success message and navigate after alert is dismissed
-      Alert.alert("Success", "Location added successfully", [
-        {
-          text: "OK",
-          onPress: () => navigation.navigate("LocationsScreen")
-        }
-      ]);
+      
       
     } catch (error) {
+      console.error("Error adding location:", error);
       Alert.alert("Error adding location", error.message);
     }
   };
+  
 
   return (
     <KeyboardAvoidingView

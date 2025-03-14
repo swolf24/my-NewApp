@@ -11,7 +11,7 @@ const SignUpScreen = ({ navigation }) => {
 
   const handleSignUp = async () => {
     if (!email || !password) {
-      setError("❌ Bitte gib eine E-Mail und ein Passwort ein.");
+      setError("❌ Pleas add an Mailadress or Password");
       return;
     }
     setLoading(true);
@@ -19,8 +19,8 @@ const SignUpScreen = ({ navigation }) => {
       await createUserWithEmailAndPassword(auth, email, password);
       navigation.replace("Login");
     } catch (err) {
-      setError("❌ Registrierung fehlgeschlagen. " + err.message);
-      console.error("Sign-Up Fehler:", err.code, err.message);
+      setError("❌ Regestration failed" + err.message);
+      console.error("Sign-Up fail:", err.code, err.message);
     } finally {
       setLoading(false);
     }
@@ -37,7 +37,7 @@ const SignUpScreen = ({ navigation }) => {
       />
       <TextInput 
         style={styles.input} 
-        placeholder="Passwort" 
+        placeholder="Password" 
         secureTextEntry 
         autoCapitalize="none" 
         onChangeText={setPassword} 
@@ -98,4 +98,3 @@ const styles = StyleSheet.create({
 });
 
 export default SignUpScreen;
-
